@@ -1,14 +1,19 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { FiArrowUpRight } from "react-icons/fi";
 import { projects } from "../data/projects";
 import MagneticButton from "./MagneticButton";
 import { useDevice } from "../hooks/useDevice";
 
+function screenshotUrl(url) {
+  return `https://api.microlink.io/?url=${encodeURIComponent(url)}&screenshot=true&meta=false&embed=screenshot.url`;
+}
+
 const ease = [0.25, 0.1, 0, 1];
 
 function ProjectCard({ project, index, skipEffects }) {
   const ref = useRef(null);
+  const [imgError, setImgError] = useState(false);
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "start 0.4"],
@@ -17,6 +22,23 @@ function ProjectCard({ project, index, skipEffects }) {
     scrollYProgress,
     [0, 1],
     skipEffects ? [1, 1] : [1.1, 1]
+  );
+
+  const thumbnail = !imgError && project.liveUrl && project.liveUrl !== "#" ? (
+    <img
+      src={screenshotUrl(project.liveUrl)}
+      alt={project.title}
+      onError={() => setImgError(true)}
+      className="w-full h-full object-cover object-top group-hover:scale-[1.02] transition-transform duration-700 ease-out"
+    />
+  ) : (
+    <div
+      className={`w-full h-full bg-gradient-to-br ${project.gradient} flex items-center justify-center group-hover:scale-[1.02] transition-transform duration-700 ease-out`}
+    >
+      <span className="text-white/80 text-[18px] md:text-[22px] font-semibold tracking-[-0.02em] drop-shadow-sm">
+        {project.title}
+      </span>
+    </div>
   );
 
   return (
@@ -33,25 +55,13 @@ function ProjectCard({ project, index, skipEffects }) {
         rel="noopener noreferrer"
         className="group block"
       >
-        {/* Image / Gradient thumbnail */}
+        {/* Screenshot / Gradient thumbnail */}
         <div className="relative aspect-[16/10] rounded-2xl overflow-hidden mb-7 shadow-[0_2px_20px_rgba(0,0,0,0.04)] group-hover:shadow-[0_8px_40px_rgba(0,0,0,0.1)] transition-shadow duration-500">
           {skipEffects ? (
-            <div
-              className={`w-full h-full bg-gradient-to-br ${project.gradient} flex items-center justify-center`}
-            >
-              <span className="text-white/80 text-[18px] md:text-[22px] font-semibold tracking-[-0.02em] drop-shadow-sm">
-                {project.title}
-              </span>
-            </div>
+            thumbnail
           ) : (
             <motion.div style={{ scale: imgScale }} className="w-full h-full">
-              <div
-                className={`w-full h-full bg-gradient-to-br ${project.gradient} flex items-center justify-center group-hover:scale-[1.02] transition-transform duration-700 ease-out`}
-              >
-                <span className="text-white/80 text-[18px] md:text-[22px] font-semibold tracking-[-0.02em] drop-shadow-sm">
-                  {project.title}
-                </span>
-              </div>
+              {thumbnail}
             </motion.div>
           )}
         </div>
