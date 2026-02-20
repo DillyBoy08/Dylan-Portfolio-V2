@@ -5,10 +5,6 @@ import { projects } from "../data/projects";
 import MagneticButton from "./MagneticButton";
 import { useDevice } from "../hooks/useDevice";
 
-function screenshotUrl(url) {
-  return `https://api.microlink.io/?url=${encodeURIComponent(url)}&screenshot=true&meta=false&embed=screenshot.url`;
-}
-
 const ease = [0.25, 0.1, 0, 1];
 
 function ProjectCard({ project, index, skipEffects }) {
@@ -24,9 +20,9 @@ function ProjectCard({ project, index, skipEffects }) {
     skipEffects ? [1, 1] : [1.1, 1]
   );
 
-  const thumbnail = !imgError && project.liveUrl && project.liveUrl !== "#" ? (
+  const thumbnail = project.thumbnail && !imgError ? (
     <img
-      src={screenshotUrl(project.liveUrl)}
+      src={project.thumbnail}
       alt={project.title}
       onError={() => setImgError(true)}
       className="w-full h-full object-cover object-top group-hover:scale-[1.02] transition-transform duration-700 ease-out"
