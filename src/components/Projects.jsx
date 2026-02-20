@@ -7,50 +7,6 @@ import { useDevice } from "../hooks/useDevice";
 
 const ease = [0.25, 0.1, 0, 1];
 
-function BrowserChrome({ project, imgError, setImgError }) {
-  const domain = project.liveUrl.replace(/^https?:\/\//, "").replace(/\/$/, "");
-
-  return (
-    <div className="w-full h-full flex flex-col bg-[#e4e4e4]">
-      {/* Browser toolbar */}
-      <div className="shrink-0 flex items-center gap-2.5 px-3 h-[30px] bg-[#dcdcdc] border-b border-black/[0.08]">
-        {/* Traffic lights */}
-        <div className="flex items-center gap-[5px]">
-          <span className="w-[11px] h-[11px] rounded-full bg-[#ff5f57] border border-black/10" />
-          <span className="w-[11px] h-[11px] rounded-full bg-[#ffbd2e] border border-black/10" />
-          <span className="w-[11px] h-[11px] rounded-full bg-[#28c840] border border-black/10" />
-        </div>
-        {/* URL bar */}
-        <div className="flex-1 mx-2 h-[18px] rounded-[4px] bg-white/80 flex items-center justify-center overflow-hidden">
-          <span className="text-[10px] text-[#86868b] font-mono leading-none px-2 truncate">
-            {domain}
-          </span>
-        </div>
-      </div>
-
-      {/* Screenshot or gradient fallback */}
-      <div className="flex-1 overflow-hidden">
-        {project.thumbnail && !imgError ? (
-          <img
-            src={project.thumbnail}
-            alt={project.title}
-            onError={() => setImgError(true)}
-            className="w-full h-full object-cover object-top group-hover:scale-[1.02] transition-transform duration-700 ease-out"
-          />
-        ) : (
-          <div
-            className={`w-full h-full bg-gradient-to-br ${project.gradient} flex items-center justify-center group-hover:scale-[1.02] transition-transform duration-700 ease-out`}
-          >
-            <span className="text-white/80 text-[18px] md:text-[22px] font-semibold tracking-[-0.02em] drop-shadow-sm">
-              {project.title}
-            </span>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
-
 function ProjectCard({ project, index, skipEffects }) {
   const ref = useRef(null);
   const [imgError, setImgError] = useState(false);
@@ -62,6 +18,17 @@ function ProjectCard({ project, index, skipEffects }) {
     scrollYProgress,
     [0, 1],
     skipEffects ? [1, 1] : [1.1, 1]
+  );
+
+  const inner = project.thumbnail && !imgError ? (
+    <img
+      src={project.thumbnail}
+      alt={project.title}
+      onError={() => setImgError(true)}
+      className="w-full h-full object-cover object-top"
+    />
+  ) : (
+    <div className={`w-full h-full bg-gradient-to-br ${project.gradient}`} />
   );
 
   return (
@@ -78,39 +45,38 @@ function ProjectCard({ project, index, skipEffects }) {
         rel="noopener noreferrer"
         className="group block"
       >
-        {/* Browser mockup thumbnail */}
-        <div className="relative aspect-[16/10] rounded-xl overflow-hidden mb-7 shadow-[0_2px_20px_rgba(0,0,0,0.08)] group-hover:shadow-[0_8px_40px_rgba(0,0,0,0.14)] transition-shadow duration-500 border border-black/[0.06]">
-          {skipEffects ? (
-            <BrowserChrome project={project} imgError={imgError} setImgError={setImgError} />
-          ) : (
-            <motion.div style={{ scale: imgScale }} className="w-full h-full">
-              <BrowserChrome project={project} imgError={imgError} setImgError={setImgError} />
-            </motion.div>
-          )}
+        {/* Thumbnail */}
+        <div className="relative aspect-[16/10] rounded-2xl overflow-hidden mb-7 shadow-[0_2px_20px_rgba(0,0,0,0.06)] group-hover:shadow-[0_8px_40px_rgba(0,0,0,0.13)] transition-shadow duration-500">
+          {/* Image with subtle scale on scroll */}
+          <motion.div style={{ scale: imgScale }} className="w-full h-full">
+            {inner}
+          </motion.div>
+
+          {/* Hover overlay */}
+          <div className="absolute inset-0 bg-[#1d1d1f]/0 group-hover:bg-[#1d1d1f]/50 transition-colors duration-400 flex items-center justify-center">
+            <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-75 flex items-center gap-2 text-white text-[14px] font-medium tracking-[-0.01em] border border-white/30 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full">
+              Visit site <FiArrowUpRight className="text-[15px]" />
+            </span>
+          </div>
         </div>
 
         {/* Info */}
-        <div className="flex items-start justify-between gap-6">
-          <div>
-            <h3 className="text-[19px] font-semibold text-[#1d1d1f] tracking-[-0.015em] group-hover:text-[#0071e3] transition-colors duration-300">
-              {project.title}
-            </h3>
-            <p className="mt-2 text-[15px] text-[#86868b] leading-[1.55] max-w-[420px]">
-              {project.description}
-            </p>
-            <div className="flex flex-wrap gap-x-3 gap-y-1 mt-3">
-              {project.tags.map((tag, i) => (
-                <span key={tag} className="text-[12px] text-[#86868b]/70">
-                  {tag}
-                  {i < project.tags.length - 1 && (
-                    <span className="ml-3 text-[#d2d2d7]">/</span>
-                  )}
-                </span>
-              ))}
-            </div>
-          </div>
-          <div className="shrink-0 mt-1.5 w-9 h-9 rounded-full border border-[#d2d2d7] group-hover:border-[#0071e3] group-hover:bg-[#0071e3] flex items-center justify-center transition-colors duration-300">
-            <FiArrowUpRight className="text-[14px] text-[#86868b] group-hover:text-white transition-colors duration-300" />
+        <div>
+          <h3 className="text-[19px] font-semibold text-[#1d1d1f] tracking-[-0.015em] group-hover:text-[#0071e3] transition-colors duration-300">
+            {project.title}
+          </h3>
+          <p className="mt-2 text-[15px] text-[#86868b] leading-[1.55] max-w-[420px]">
+            {project.description}
+          </p>
+          <div className="flex flex-wrap gap-x-3 gap-y-1 mt-3">
+            {project.tags.map((tag, i) => (
+              <span key={tag} className="text-[12px] text-[#86868b]/70">
+                {tag}
+                {i < project.tags.length - 1 && (
+                  <span className="ml-3 text-[#d2d2d7]">/</span>
+                )}
+              </span>
+            ))}
           </div>
         </div>
       </a>
