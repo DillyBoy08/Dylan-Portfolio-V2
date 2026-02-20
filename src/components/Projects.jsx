@@ -7,6 +7,50 @@ import { useDevice } from "../hooks/useDevice";
 
 const ease = [0.25, 0.1, 0, 1];
 
+function BrowserChrome({ project, imgError, setImgError }) {
+  const domain = project.liveUrl.replace(/^https?:\/\//, "").replace(/\/$/, "");
+
+  return (
+    <div className="w-full h-full flex flex-col bg-[#e4e4e4]">
+      {/* Browser toolbar */}
+      <div className="shrink-0 flex items-center gap-2.5 px-3 h-[30px] bg-[#dcdcdc] border-b border-black/[0.08]">
+        {/* Traffic lights */}
+        <div className="flex items-center gap-[5px]">
+          <span className="w-[11px] h-[11px] rounded-full bg-[#ff5f57] border border-black/10" />
+          <span className="w-[11px] h-[11px] rounded-full bg-[#ffbd2e] border border-black/10" />
+          <span className="w-[11px] h-[11px] rounded-full bg-[#28c840] border border-black/10" />
+        </div>
+        {/* URL bar */}
+        <div className="flex-1 mx-2 h-[18px] rounded-[4px] bg-white/80 flex items-center justify-center overflow-hidden">
+          <span className="text-[10px] text-[#86868b] font-mono leading-none px-2 truncate">
+            {domain}
+          </span>
+        </div>
+      </div>
+
+      {/* Screenshot or gradient fallback */}
+      <div className="flex-1 overflow-hidden">
+        {project.thumbnail && !imgError ? (
+          <img
+            src={project.thumbnail}
+            alt={project.title}
+            onError={() => setImgError(true)}
+            className="w-full h-full object-cover object-top group-hover:scale-[1.02] transition-transform duration-700 ease-out"
+          />
+        ) : (
+          <div
+            className={`w-full h-full bg-gradient-to-br ${project.gradient} flex items-center justify-center group-hover:scale-[1.02] transition-transform duration-700 ease-out`}
+          >
+            <span className="text-white/80 text-[18px] md:text-[22px] font-semibold tracking-[-0.02em] drop-shadow-sm">
+              {project.title}
+            </span>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function ProjectCard({ project, index, skipEffects }) {
   const ref = useRef(null);
   const [imgError, setImgError] = useState(false);
@@ -18,23 +62,6 @@ function ProjectCard({ project, index, skipEffects }) {
     scrollYProgress,
     [0, 1],
     skipEffects ? [1, 1] : [1.1, 1]
-  );
-
-  const thumbnail = project.thumbnail && !imgError ? (
-    <img
-      src={project.thumbnail}
-      alt={project.title}
-      onError={() => setImgError(true)}
-      className="w-full h-full object-cover object-top group-hover:scale-[1.02] transition-transform duration-700 ease-out"
-    />
-  ) : (
-    <div
-      className={`w-full h-full bg-gradient-to-br ${project.gradient} flex items-center justify-center group-hover:scale-[1.02] transition-transform duration-700 ease-out`}
-    >
-      <span className="text-white/80 text-[18px] md:text-[22px] font-semibold tracking-[-0.02em] drop-shadow-sm">
-        {project.title}
-      </span>
-    </div>
   );
 
   return (
@@ -51,13 +78,13 @@ function ProjectCard({ project, index, skipEffects }) {
         rel="noopener noreferrer"
         className="group block"
       >
-        {/* Screenshot / Gradient thumbnail */}
-        <div className="relative aspect-[16/10] rounded-2xl overflow-hidden mb-7 shadow-[0_2px_20px_rgba(0,0,0,0.04)] group-hover:shadow-[0_8px_40px_rgba(0,0,0,0.1)] transition-shadow duration-500">
+        {/* Browser mockup thumbnail */}
+        <div className="relative aspect-[16/10] rounded-xl overflow-hidden mb-7 shadow-[0_2px_20px_rgba(0,0,0,0.08)] group-hover:shadow-[0_8px_40px_rgba(0,0,0,0.14)] transition-shadow duration-500 border border-black/[0.06]">
           {skipEffects ? (
-            thumbnail
+            <BrowserChrome project={project} imgError={imgError} setImgError={setImgError} />
           ) : (
             <motion.div style={{ scale: imgScale }} className="w-full h-full">
-              {thumbnail}
+              <BrowserChrome project={project} imgError={imgError} setImgError={setImgError} />
             </motion.div>
           )}
         </div>
