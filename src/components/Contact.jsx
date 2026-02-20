@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import emailjs from "@emailjs/browser";
 import { useDevice } from "../hooks/useDevice";
 
 const ease = [0.25, 0.1, 0, 1];
@@ -20,20 +21,29 @@ export default function Contact() {
     skipEffects ? ["100%", "100%"] : ["0%", "100%"]
   );
 
+  const formRef = useRef(null);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    const form = e.target;
-    const name = form.name.value;
-    const email = form.email.value;
-    const message = form.message.value;
+    setStatus("sending");
 
-    const subject = encodeURIComponent(`Portfolio enquiry from ${name}`);
-    const body = encodeURIComponent(`From: ${name}\nEmail: ${email}\n\n${message}`);
-    window.location.href = `mailto:swartdylan42@gmail.com?subject=${subject}&body=${body}`;
+    // Set timestamp at submit time, not render time
+    const timeInput = formRef.current.querySelector('input[name="time"]');
+    if (timeInput) timeInput.value = new Date().toLocaleString();
 
-    setStatus("sent");
-    form.reset();
-    setTimeout(() => setStatus("idle"), 3000);
+    emailjs
+      .sendForm("service_9jq6o7w", "template_5ej0kab", formRef.current, {
+        publicKey: "qgtoZVKB5i8uGPk6Q",
+      })
+      .then(() => {
+        setStatus("sent");
+        formRef.current.reset();
+        setTimeout(() => setStatus("idle"), 3000);
+      })
+      .catch(() => {
+        setStatus("error");
+        setTimeout(() => setStatus("idle"), 3000);
+      });
   };
 
   const inputClasses =
@@ -84,7 +94,7 @@ export default function Contact() {
               className="text-[17px] text-[#86868b] leading-[1.7] tracking-[-0.01em] max-w-[400px] mb-10"
             >
               Got a project in mind, or simply fancy a chat?
-              Drop me a message — I&apos;d love to hear from you.
+              Drop me a message, I&apos;d love to hear from you.
             </motion.p>
 
             {/* Social links */}
@@ -116,6 +126,7 @@ export default function Contact() {
 
           {/* Right — form */}
           <motion.form
+            ref={formRef}
             onSubmit={handleSubmit}
             initial={{ opacity: 0, y: skipEffects ? 0 : 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -123,11 +134,14 @@ export default function Contact() {
             transition={{ duration: skipEffects ? 0.3 : 0.8, delay: skipEffects ? 0 : 0.3, ease }}
             className="flex flex-col gap-4"
           >
+            <input type="hidden" name="time" value="" />
+            <input type="hidden" name="title" value="Portfolio Contact" />
             <input
               type="text"
               name="name"
               placeholder="Name"
               required
+              aria-label="Your name"
               className={inputClasses}
             />
             <input
@@ -135,20 +149,29 @@ export default function Contact() {
               name="email"
               placeholder="Email"
               required
+              aria-label="Your email address"
               className={inputClasses}
             />
             <textarea
               name="message"
               placeholder="Message"
               required
+              aria-label="Your message"
               rows={6}
               className={`${inputClasses} resize-none`}
             />
             <button
               type="submit"
-              className="mt-2 h-[48px] rounded-full bg-[#1d1d1f] text-white text-[14px] font-medium hover:bg-[#000] transition-colors duration-300 hover:shadow-[0_4px_20px_rgba(0,0,0,0.15)]"
+              disabled={status === "sending"}
+              className="mt-2 h-[48px] rounded-full bg-[#1d1d1f] text-white text-[14px] font-medium hover:bg-[#000] transition-colors duration-300 hover:shadow-[0_4px_20px_rgba(0,0,0,0.15)] disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {status === "sent" ? "Opening mail client..." : "Send message"}
+              {status === "sending"
+                ? "Sending..."
+                : status === "sent"
+                ? "Message sent!"
+                : status === "error"
+                ? "Failed to send. Try again."
+                : "Send message"}
             </button>
           </motion.form>
         </div>

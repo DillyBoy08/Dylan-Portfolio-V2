@@ -87,6 +87,7 @@ export default function Navbar() {
           onClick={() => setOpen(!open)}
           className="md:hidden w-5 h-5 flex flex-col justify-center gap-[5px]"
           aria-label="Menu"
+          aria-expanded={open}
         >
           <span
             className={`block w-full h-[1.5px] bg-[#1d1d1f] transition-transform duration-300 origin-center ${

@@ -128,7 +128,7 @@ export default function About() {
         >
           <p className="text-[17px] text-[#424245] leading-[1.7] tracking-[-0.005em]">
             I&apos;m a full-stack developer from South Africa with a passion
-            for building end-to-end web applications — from polished,
+            for building end-to-end web applications, from polished,
             responsive frontends to robust, scalable backends.
           </p>
           <p className="text-[17px] text-[#424245] leading-[1.7] tracking-[-0.005em]">
