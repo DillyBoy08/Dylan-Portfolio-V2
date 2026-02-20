@@ -1,15 +1,88 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { FiArrowUpRight } from "react-icons/fi";
 import { projects } from "../data/projects";
 import MagneticButton from "./MagneticButton";
 import { useDevice } from "../hooks/useDevice";
 
 const ease = [0.25, 0.1, 0, 1];
 
+// ── DL Sure thumbnail ────────────────────────────────────────────────────────
+function DLSureThumbnail() {
+  return (
+    <div className="w-full h-full bg-[#0d2f35] flex flex-col justify-between p-8 overflow-hidden relative">
+      {/* Background geometric accent */}
+      <div className="absolute -right-16 -top-16 w-72 h-72 rounded-full bg-[#2c7873]/20" />
+      <div className="absolute -right-8 -top-8 w-48 h-48 rounded-full bg-[#2c7873]/15" />
+
+      {/* Logo row */}
+      <div className="relative flex items-center gap-3">
+        <div className="w-9 h-9 rounded-full bg-[#2c7873] flex items-center justify-center">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+        </div>
+        <span className="text-white/90 text-sm font-semibold tracking-wide">dlsure.co.za</span>
+      </div>
+
+      {/* Headline */}
+      <div className="relative">
+        <p className="text-[#2c7873] text-xs font-mono uppercase tracking-widest mb-2">Insurance Brokers</p>
+        <h3 className="text-white text-3xl font-bold leading-tight tracking-tight">
+          Your Safety.<br />
+          <span className="text-[#2c7873]">Our Promise.</span>
+        </h3>
+      </div>
+
+      {/* Bottom bar */}
+      <div className="relative flex items-center gap-3">
+        <span className="text-xs text-white/40 font-mono">Paarl, South Africa</span>
+        <div className="flex-1 h-px bg-white/10" />
+        <span className="text-xs text-white/40 font-mono">2024</span>
+      </div>
+    </div>
+  );
+}
+
+// ── Bento UI thumbnail ────────────────────────────────────────────────────────
+function BentoThumbnail() {
+  return (
+    <div className="w-full h-full bg-[#F5F0E8] flex flex-col justify-between p-6 overflow-hidden relative">
+      {/* Mini bento grid */}
+      <div className="absolute inset-0 p-5 grid gap-2" style={{ gridTemplateColumns: '2fr 1fr', gridTemplateRows: '1fr 1fr' }}>
+        {/* Hero cell */}
+        <div className="border-[2.5px] border-[#1A1A1A] bg-[#F5F0E8] flex items-end p-3 row-span-2" style={{ boxShadow: '3px 3px 0 #1A1A1A' }}>
+          <div>
+            <div className="font-black text-[#1A1A1A] text-xl leading-none">Dylan<br />Swart</div>
+            <div className="mt-1.5 text-[8px] font-mono uppercase tracking-widest text-[#C4623A]">Frontend Dev</div>
+          </div>
+        </div>
+        {/* Clock cell */}
+        <div className="border-[2.5px] border-[#1A1A1A] bg-[#1A1A1A] flex items-center justify-center" style={{ boxShadow: '3px 3px 0 #1A1A1A' }}>
+          <span className="text-[#F5F0E8] font-mono font-bold text-sm tracking-tight">15:28</span>
+        </div>
+        {/* Marquee cell */}
+        <div className="border-[2.5px] border-[#1A1A1A] bg-[#C4623A] flex items-center overflow-hidden px-2" style={{ boxShadow: '3px 3px 0 #1A1A1A' }}>
+          <span className="text-[#F5F0E8] font-mono text-[7px] uppercase tracking-widest whitespace-nowrap">REACT · FRAMER · TAILWIND ·</span>
+        </div>
+      </div>
+
+      {/* Overlay label */}
+      <div className="relative mt-auto pt-[60%]">
+        <div className="absolute bottom-0 left-0 right-0 p-3 flex justify-between items-end">
+          <span className="text-[10px] font-mono text-[#1A1A1A]/40 uppercase tracking-wider">Interactive UI Demo</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const THUMBNAILS = {
+  1: DLSureThumbnail,
+  2: BentoThumbnail,
+};
+
 function ProjectCard({ project, index, skipEffects }) {
   const ref = useRef(null);
-  const [imgError, setImgError] = useState(false);
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "start 0.4"],
@@ -20,16 +93,9 @@ function ProjectCard({ project, index, skipEffects }) {
     skipEffects ? [1, 1] : [1.1, 1]
   );
 
-  const inner = project.thumbnail && !imgError ? (
-    <img
-      src={project.thumbnail}
-      alt={project.title}
-      onError={() => setImgError(true)}
-      className="w-full h-full object-cover object-top"
-    />
-  ) : (
+  const Thumbnail = THUMBNAILS[project.id] ?? (() => (
     <div className={`w-full h-full bg-gradient-to-br ${project.gradient}`} />
-  );
+  ));
 
   return (
     <motion.div
@@ -47,15 +113,14 @@ function ProjectCard({ project, index, skipEffects }) {
       >
         {/* Thumbnail */}
         <div className="relative aspect-[16/10] rounded-2xl overflow-hidden mb-7 shadow-[0_2px_20px_rgba(0,0,0,0.06)] group-hover:shadow-[0_8px_40px_rgba(0,0,0,0.13)] transition-shadow duration-500">
-          {/* Image with subtle scale on scroll */}
           <motion.div style={{ scale: imgScale }} className="w-full h-full">
-            {inner}
+            <Thumbnail />
           </motion.div>
 
           {/* Hover overlay */}
           <div className="absolute inset-0 bg-[#1d1d1f]/0 group-hover:bg-[#1d1d1f]/50 transition-colors duration-400 flex items-center justify-center">
             <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-75 flex items-center gap-2 text-white text-[14px] font-medium tracking-[-0.01em] border border-white/30 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full">
-              Visit site <FiArrowUpRight className="text-[15px]" />
+              Visit site →
             </span>
           </div>
         </div>
