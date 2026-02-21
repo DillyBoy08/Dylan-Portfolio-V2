@@ -3,7 +3,7 @@ export const projects = [
     id: 1,
     title: "DL Sure Insurance Brokers",
     description:
-      "A professional business website for an insurance brokerage based in Paarl, South Africa. Features service overviews, contact integration, and a clean, trustworthy design.",
+      "Business website built for an insurance brokerage in Paarl, South Africa. Clean layout, service overviews and contact integration designed to build trust.",
     tags: ["Web Design", "Business Site", "Responsive"],
     gradient: "from-[#0f2027] via-[#203a43] to-[#2c5364]",
     thumbnail: "/thumbnails/dlsure.png",
@@ -12,9 +12,9 @@ export const projects = [
   },
   {
     id: 2,
-    title: "Bento UI — Interactive Skills Demo",
+    title: "Bento UI Interactive Skills Demo",
     description:
-      "A neubrutalist bento grid showcasing frontend craft — live clock, spring-snap drag, character-by-character typewriter, CSS marquee, colour palette generator, animated music player, and custom toggle components. Every component handbuilt.",
+      "A neubrutalist bento grid built to show off frontend craft. Live clock, spring drag, typewriter text, CSS marquee, colour palette generator and an animated music player. Every component handbuilt.",
     tags: ["React", "Framer Motion", "Tailwind CSS", "CSS Animation"],
     gradient: "from-[#C4623A] via-[#a04e2e] to-[#1A1A1A]",
     thumbnail: "/thumbnails/bento-demo.png",

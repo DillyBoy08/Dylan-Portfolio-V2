@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useMotionValue, useSpring } from "framer-motion";
 import { projects } from "../data/projects";
 import MagneticButton from "./MagneticButton";
 import { useDevice } from "../hooks/useDevice";
@@ -93,9 +93,31 @@ function ProjectCard({ project, index, skipEffects }) {
     skipEffects ? [1, 1] : [1.1, 1]
   );
 
+  // 3D tilt — always declared (hooks can't be conditional), applied only when effects are on
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [6, -6]), { stiffness: 300, damping: 30, mass: 0.5 });
+  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-6, 6]), { stiffness: 300, damping: 30, mass: 0.5 });
+  const shine = useTransform(
+    [mouseX, mouseY],
+    ([x, y]) => `radial-gradient(circle at ${(x + 0.5) * 100}% ${(y + 0.5) * 100}%, rgba(255,255,255,0.14) 0%, transparent 55%)`
+  );
+
+  const handleMouseMove = (e) => {
+    if (skipEffects) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    mouseX.set((e.clientX - rect.left) / rect.width - 0.5);
+    mouseY.set((e.clientY - rect.top) / rect.height - 0.5);
+  };
+  const handleMouseLeave = () => { mouseX.set(0); mouseY.set(0); };
+
   const Thumbnail = THUMBNAILS[project.id] ?? (() => (
     <div className={`w-full h-full bg-gradient-to-br ${project.gradient}`} />
   ));
+
+  const displayUrl = project.liveUrl === "#"
+    ? "github.com"
+    : project.liveUrl.replace("https://", "");
 
   return (
     <motion.div
@@ -111,18 +133,48 @@ function ProjectCard({ project, index, skipEffects }) {
         rel="noopener noreferrer"
         className="group block"
       >
-        {/* Thumbnail */}
-        <div className="relative aspect-[16/10] rounded-2xl overflow-hidden mb-7 shadow-[0_2px_20px_rgba(0,0,0,0.06)] group-hover:shadow-[0_8px_40px_rgba(0,0,0,0.13)] transition-shadow duration-500">
-          <motion.div style={{ scale: imgScale }} className="w-full h-full">
-            <Thumbnail />
-          </motion.div>
+        {/* Thumbnail — browser frame + 3D tilt */}
+        <div className="mb-7" style={{ perspective: "1200px" }}>
+          <motion.div
+            style={skipEffects ? {} : { rotateX, rotateY }}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+            className="rounded-2xl overflow-hidden shadow-[0_2px_20px_rgba(0,0,0,0.08)] group-hover:shadow-[0_20px_52px_rgba(0,0,0,0.18)] transition-shadow duration-500"
+          >
+            {/* Browser chrome */}
+            <div className="bg-[#ececec] flex items-center gap-3 px-4 py-2.5 border-b border-[#d2d2d7]">
+              <div className="flex gap-1.5 shrink-0">
+                <div className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
+                <div className="w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
+                <div className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
+              </div>
+              <div className="flex-1 mx-1 bg-white rounded-[6px] px-3 py-[3px] text-[11px] font-mono text-[#86868b] border border-[#d2d2d7] truncate select-none">
+                {displayUrl}
+              </div>
+            </div>
 
-          {/* Hover overlay */}
-          <div className="absolute inset-0 bg-[#1d1d1f]/0 group-hover:bg-[#1d1d1f]/50 transition-colors duration-400 flex items-center justify-center">
-            <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-75 flex items-center gap-2 text-white text-[14px] font-medium tracking-[-0.01em] border border-white/30 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full">
-              Visit site →
-            </span>
-          </div>
+            {/* Thumbnail content */}
+            <div className="relative aspect-[16/10] overflow-hidden">
+              <motion.div style={{ scale: imgScale }} className="w-full h-full">
+                <Thumbnail />
+              </motion.div>
+
+              {/* Shine overlay */}
+              {!skipEffects && (
+                <motion.div
+                  className="absolute inset-0 pointer-events-none"
+                  style={{ background: shine }}
+                />
+              )}
+
+              {/* Hover overlay */}
+              <div className="absolute inset-0 bg-[#1d1d1f]/0 group-hover:bg-[#1d1d1f]/50 transition-colors duration-400 flex items-center justify-center">
+                <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-75 flex items-center gap-2 text-white text-[14px] font-medium tracking-[-0.01em] border border-white/30 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full">
+                  Visit site →
+                </span>
+              </div>
+            </div>
+          </motion.div>
         </div>
 
         {/* Info */}
