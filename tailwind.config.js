@@ -7,7 +7,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        display: ['Bricolage Grotesque', 'system-ui', 'sans-serif'],
+        display: ['Raleway', 'system-ui', 'sans-serif'],
         sans: ['Karla', 'system-ui', '-apple-system', 'sans-serif'],
       },
       colors: {
