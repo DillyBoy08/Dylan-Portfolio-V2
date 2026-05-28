@@ -54,14 +54,14 @@ export default function Navbar() {
       transition={{ duration: 0.8, delay: 0.2 }}
       className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-500 ${
         scrolled
-          ? "bg-white/90 backdrop-blur-md shadow-[0_1px_0_rgba(0,0,0,0.04)]"
+          ? "bg-[#F9F8F4]/90 backdrop-blur-md shadow-[0_1px_0_rgba(34,29,21,0.06)]"
           : "bg-transparent"
       }`}
     >
       <nav className="max-w-[980px] mx-auto px-6 h-12 flex items-center justify-between">
         <a
           href="#"
-          className="text-[13px] font-semibold text-[#1d1d1f] tracking-[-0.01em] hover:opacity-60 transition-opacity duration-300"
+          className="font-display text-[13px] font-semibold text-ink tracking-[-0.01em] hover:opacity-60 transition-opacity duration-300"
         >
           Dylan Swart
         </a>
@@ -73,8 +73,8 @@ export default function Navbar() {
                 href={link.href}
                 className={`link-underline text-[12px] transition-colors duration-300 ${
                   activeSection === link.id
-                    ? "text-[#1d1d1f] font-medium"
-                    : "text-[#424245] hover:text-[#1d1d1f]"
+                    ? "text-ink font-medium"
+                    : "text-ink-2 hover:text-ink"
                 }`}
               >
                 {link.label}
@@ -90,12 +90,12 @@ export default function Navbar() {
           aria-expanded={open}
         >
           <span
-            className={`block w-full h-[1.5px] bg-[#1d1d1f] transition-transform duration-300 origin-center ${
+            className={`block w-full h-[1.5px] bg-ink transition-transform duration-300 origin-center ${
               open ? "rotate-45 translate-y-[3.25px]" : ""
             }`}
           />
           <span
-            className={`block w-full h-[1.5px] bg-[#1d1d1f] transition-transform duration-300 origin-center ${
+            className={`block w-full h-[1.5px] bg-ink transition-transform duration-300 origin-center ${
               open ? "-rotate-45 -translate-y-[3.25px]" : ""
             }`}
           />
@@ -107,7 +107,7 @@ export default function Navbar() {
           open ? "max-h-48" : "max-h-0"
         }`}
       >
-        <div className="px-6 py-4 bg-white/95 border-t border-black/[0.04]">
+        <div className="px-6 py-4 bg-[#F9F8F4]/95 border-t border-line">
           {links.map((link) => (
             <a
               key={link.href}
@@ -115,8 +115,8 @@ export default function Navbar() {
               onClick={() => setOpen(false)}
               className={`block py-2 text-[14px] ${
                 activeSection === link.id
-                  ? "text-[#1d1d1f] font-medium"
-                  : "text-[#424245]"
+                  ? "text-ink font-medium"
+                  : "text-ink-2"
               }`}
             >
               {link.label}

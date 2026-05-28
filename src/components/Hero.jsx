@@ -33,7 +33,7 @@ function MouseGlow() {
       <div
         ref={ref}
         className="w-[600px] h-[600px] rounded-full will-change-transform"
-        style={{ background: "radial-gradient(circle, rgba(0,113,227,0.035) 0%, transparent 70%)" }}
+        style={{ background: "radial-gradient(circle, rgba(181,98,61,0.04) 0%, transparent 70%)" }}
       />
     </div>
   );
@@ -53,8 +53,26 @@ export default function Hero() {
   return (
     <section
       ref={ref}
-      className="relative min-h-[100svh] flex flex-col items-center justify-center px-6 bg-[#fafafa] overflow-hidden"
+      className="relative min-h-[100svh] flex flex-col items-center justify-center px-6 bg-canvas overflow-hidden"
     >
+      {/* DS monogram — personal watermark, barely visible */}
+      <div
+        className="pointer-events-none select-none absolute inset-0 flex items-center justify-center overflow-hidden"
+        aria-hidden="true"
+      >
+        <span
+          className="font-display font-extrabold"
+          style={{
+            fontSize: "clamp(160px, 28vw, 480px)",
+            color: "transparent",
+            WebkitTextStroke: "1px rgba(181,98,61,0.045)",
+            letterSpacing: "-0.04em",
+            lineHeight: 1,
+            userSelect: "none",
+          }}
+        >DS</span>
+      </div>
+
       <MouseGlow />
 
       <motion.div
@@ -65,7 +83,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2, ease }}
-          className="text-[15px] md:text-[17px] text-[#86868b] font-medium tracking-[-0.01em] mb-6"
+          className="text-[15px] md:text-[17px] text-ink-2 font-medium tracking-[-0.01em] mb-6"
         >
           Full-Stack Developer &mdash; South Africa
         </motion.p>
@@ -74,26 +92,21 @@ export default function Hero() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.3, ease }}
-          className="text-[48px] sm:text-[64px] md:text-[80px] lg:text-[96px] font-semibold tracking-[-0.04em] leading-[1.05] mb-8"
-          style={{ color: '#1d1d1f' }}
+          className="font-display text-[48px] sm:text-[64px] md:text-[80px] lg:text-[96px] font-bold tracking-[-0.025em] leading-[1.02] mb-8 text-ink"
         >
           Crafting{" "}
-          <span className="bg-gradient-to-r from-[#1d1d1f] via-[#3b82f6] to-[#2563eb] bg-clip-text text-transparent">
-            digital
-            <br />
-            experiences.
-          </span>
+          <span style={{ color: "#B5623D" }}>digital</span>
+          <br />
+          experiences.
         </motion.h1>
 
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.5, ease }}
-          className="text-[17px] md:text-[21px] text-[#86868b] leading-[1.5] tracking-[-0.01em] max-w-[600px] mx-auto mb-10"
+          className="text-[17px] md:text-[21px] text-ink-2 leading-[1.55] tracking-[-0.01em] max-w-[600px] mx-auto mb-10"
         >
-          I design and build clean, responsive websites
-          <br className="hidden sm:block" />
-          and applications that help businesses stand out online.
+          I design and build clean, responsive websites and applications that help businesses stand out online.
         </motion.p>
 
         <motion.div
@@ -104,7 +117,7 @@ export default function Hero() {
         >
           <MagneticButton
             href="#projects"
-            className="group inline-flex items-center justify-center h-[48px] px-8 rounded-full bg-[#1d1d1f] text-white text-[14px] font-medium hover:bg-[#000] transition-colors duration-300 hover:shadow-[0_4px_20px_rgba(0,0,0,0.15)]"
+            className="group inline-flex items-center justify-center h-[48px] px-8 rounded-full bg-ink text-canvas text-[14px] font-medium hover:bg-[#2D2720] transition-colors duration-300 hover:shadow-[0_4px_20px_rgba(34,29,21,0.18)]"
           >
             View my work
             <span className="inline-block ml-2 group-hover:translate-x-1 transition-transform duration-300">
@@ -113,7 +126,7 @@ export default function Hero() {
           </MagneticButton>
           <MagneticButton
             href="#contact"
-            className="inline-flex items-center justify-center h-[48px] px-8 rounded-full text-[#1d1d1f] text-[14px] font-medium border border-[#d2d2d7] hover:border-[#86868b] transition-colors duration-300"
+            className="inline-flex items-center justify-center h-[48px] px-8 rounded-full text-ink text-[14px] font-medium border border-line hover:border-accent transition-colors duration-300"
           >
             Get in touch
           </MagneticButton>
@@ -127,7 +140,7 @@ export default function Hero() {
         className="absolute bottom-8 left-1/2 -translate-x-1/2"
       >
         <a href="#about" className="flex flex-col items-center gap-3 group">
-          <span className="text-[10px] uppercase tracking-[0.15em] text-[#86868b]/50 group-hover:text-[#86868b] transition-colors duration-300">
+          <span className="text-[10px] uppercase tracking-[0.15em] text-ink-2/50 group-hover:text-ink-2 transition-colors duration-300">
             Scroll
           </span>
           <motion.div

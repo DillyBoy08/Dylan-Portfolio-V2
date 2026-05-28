@@ -6,81 +6,6 @@ import { useDevice } from "../hooks/useDevice";
 
 const ease = [0.25, 0.1, 0, 1];
 
-// ── DL Sure thumbnail ────────────────────────────────────────────────────────
-function DLSureThumbnail() {
-  return (
-    <div className="w-full h-full bg-[#0d2f35] flex flex-col justify-between p-8 overflow-hidden relative">
-      {/* Background geometric accent */}
-      <div className="absolute -right-16 -top-16 w-72 h-72 rounded-full bg-[#2c7873]/20" />
-      <div className="absolute -right-8 -top-8 w-48 h-48 rounded-full bg-[#2c7873]/15" />
-
-      {/* Logo row */}
-      <div className="relative flex items-center gap-3">
-        <div className="w-9 h-9 rounded-full bg-[#2c7873] flex items-center justify-center">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-          </svg>
-        </div>
-        <span className="text-white/90 text-sm font-semibold tracking-wide">dlsure.co.za</span>
-      </div>
-
-      {/* Headline */}
-      <div className="relative">
-        <p className="text-[#2c7873] text-xs font-mono uppercase tracking-widest mb-2">Insurance Brokers</p>
-        <h3 className="text-white text-3xl font-bold leading-tight tracking-tight">
-          Your Safety.<br />
-          <span className="text-[#2c7873]">Our Promise.</span>
-        </h3>
-      </div>
-
-      {/* Bottom bar */}
-      <div className="relative flex items-center gap-3">
-        <span className="text-xs text-white/40 font-mono">Paarl, South Africa</span>
-        <div className="flex-1 h-px bg-white/10" />
-        <span className="text-xs text-white/40 font-mono">2024</span>
-      </div>
-    </div>
-  );
-}
-
-// ── Bento UI thumbnail ────────────────────────────────────────────────────────
-function BentoThumbnail() {
-  return (
-    <div className="w-full h-full bg-[#F5F0E8] flex flex-col justify-between p-6 overflow-hidden relative">
-      {/* Mini bento grid */}
-      <div className="absolute inset-0 p-5 grid gap-2" style={{ gridTemplateColumns: '2fr 1fr', gridTemplateRows: '1fr 1fr' }}>
-        {/* Hero cell */}
-        <div className="border-[2.5px] border-[#1A1A1A] bg-[#F5F0E8] flex items-end p-3 row-span-2" style={{ boxShadow: '3px 3px 0 #1A1A1A' }}>
-          <div>
-            <div className="font-black text-[#1A1A1A] text-xl leading-none">Dylan<br />Swart</div>
-            <div className="mt-1.5 text-[8px] font-mono uppercase tracking-widest text-[#C4623A]">Frontend Dev</div>
-          </div>
-        </div>
-        {/* Clock cell */}
-        <div className="border-[2.5px] border-[#1A1A1A] bg-[#1A1A1A] flex items-center justify-center" style={{ boxShadow: '3px 3px 0 #1A1A1A' }}>
-          <span className="text-[#F5F0E8] font-mono font-bold text-sm tracking-tight">15:28</span>
-        </div>
-        {/* Marquee cell */}
-        <div className="border-[2.5px] border-[#1A1A1A] bg-[#C4623A] flex items-center overflow-hidden px-2" style={{ boxShadow: '3px 3px 0 #1A1A1A' }}>
-          <span className="text-[#F5F0E8] font-mono text-[7px] uppercase tracking-widest whitespace-nowrap">REACT · FRAMER · TAILWIND ·</span>
-        </div>
-      </div>
-
-      {/* Overlay label */}
-      <div className="relative mt-auto pt-[60%]">
-        <div className="absolute bottom-0 left-0 right-0 p-3 flex justify-between items-end">
-          <span className="text-[10px] font-mono text-[#1A1A1A]/40 uppercase tracking-wider">Interactive UI Demo</span>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-const THUMBNAILS = {
-  1: DLSureThumbnail,
-  2: BentoThumbnail,
-};
-
 function ProjectCard({ project, index, skipEffects }) {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({
@@ -111,10 +36,6 @@ function ProjectCard({ project, index, skipEffects }) {
   };
   const handleMouseLeave = () => { mouseX.set(0); mouseY.set(0); };
 
-  const Thumbnail = THUMBNAILS[project.id] ?? (() => (
-    <div className={`w-full h-full bg-gradient-to-br ${project.gradient}`} />
-  ));
-
   const displayUrl = project.liveUrl === "#"
     ? "github.com"
     : project.liveUrl.replace("https://", "");
@@ -133,33 +54,24 @@ function ProjectCard({ project, index, skipEffects }) {
         rel="noopener noreferrer"
         className="group block"
       >
-        {/* Thumbnail — browser frame + 3D tilt */}
-        <div className="mb-7" style={{ perspective: "1200px" }}>
+        {/* Thumbnail — clean editorial frame, no browser chrome */}
+        <div className="mb-6" style={{ perspective: "1200px" }}>
           <motion.div
             style={skipEffects ? {} : { rotateX, rotateY }}
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
-            className="rounded-2xl overflow-hidden shadow-[0_2px_20px_rgba(0,0,0,0.08)] group-hover:shadow-[0_20px_52px_rgba(0,0,0,0.18)] transition-shadow duration-500"
+            className="rounded-2xl overflow-hidden ring-1 ring-line shadow-[0_2px_24px_rgba(34,29,21,0.06)] group-hover:shadow-[0_20px_48px_rgba(34,29,21,0.13)] transition-shadow duration-500"
           >
-            {/* Browser chrome */}
-            <div className="bg-[#ececec] flex items-center gap-3 px-4 py-2.5 border-b border-[#d2d2d7]">
-              <div className="flex gap-1.5 shrink-0">
-                <div className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
-                <div className="w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
-                <div className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
-              </div>
-              <div className="flex-1 mx-1 bg-white rounded-[6px] px-3 py-[3px] text-[11px] font-mono text-[#86868b] border border-[#d2d2d7] truncate select-none">
-                {displayUrl}
-              </div>
-            </div>
-
-            {/* Thumbnail content */}
             <div className="relative aspect-[16/10] overflow-hidden">
               <motion.div style={{ scale: imgScale }} className="w-full h-full">
-                <Thumbnail />
+                <img
+                  src={project.thumbnail}
+                  alt={project.title}
+                  className="w-full h-full object-cover object-top"
+                  loading="lazy"
+                />
               </motion.div>
 
-              {/* Shine overlay */}
               {!skipEffects && (
                 <motion.div
                   className="absolute inset-0 pointer-events-none"
@@ -167,9 +79,8 @@ function ProjectCard({ project, index, skipEffects }) {
                 />
               )}
 
-              {/* Hover overlay */}
-              <div className="absolute inset-0 bg-[#1d1d1f]/0 group-hover:bg-[#1d1d1f]/50 transition-colors duration-400 flex items-center justify-center">
-                <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-75 flex items-center gap-2 text-white text-[14px] font-medium tracking-[-0.01em] border border-white/30 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full">
+              <div className="absolute inset-0 bg-ink/0 group-hover:bg-ink/50 transition-colors duration-400 flex items-center justify-center">
+                <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-75 flex items-center gap-2 text-white text-[13px] font-medium tracking-[-0.01em] border border-white/25 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full">
                   Visit site →
                 </span>
               </div>
@@ -179,18 +90,19 @@ function ProjectCard({ project, index, skipEffects }) {
 
         {/* Info */}
         <div>
-          <h3 className="text-[19px] font-semibold text-[#1d1d1f] tracking-[-0.015em] group-hover:text-[#0071e3] transition-colors duration-300">
+          <p className="text-[11px] font-mono text-ink-3 mb-2 tracking-[0.02em]">{displayUrl}</p>
+          <h3 className="font-display text-[19px] font-semibold text-ink tracking-[-0.01em] group-hover:text-accent transition-colors duration-300">
             {project.title}
           </h3>
-          <p className="mt-2 text-[15px] text-[#86868b] leading-[1.55] max-w-[420px]">
+          <p className="mt-2 text-[15px] text-ink-2 leading-[1.6] max-w-[420px]">
             {project.description}
           </p>
           <div className="flex flex-wrap gap-x-3 gap-y-1 mt-3">
             {project.tags.map((tag, i) => (
-              <span key={tag} className="text-[12px] text-[#86868b]/70">
+              <span key={tag} className="text-[12px] text-ink-2/70">
                 {tag}
                 {i < project.tags.length - 1 && (
-                  <span className="ml-3 text-[#d2d2d7]">/</span>
+                  <span className="ml-3 text-line-mid">/</span>
                 )}
               </span>
             ))}
@@ -217,13 +129,13 @@ export default function Projects() {
   );
 
   return (
-    <section id="projects" className="relative bg-[#fafafa] section-fade-bottom">
+    <section id="projects" className="relative bg-canvas section-fade-bottom">
       {/* Animated divider */}
       <div className="max-w-[980px] mx-auto px-6">
         <motion.div
           ref={dividerRef}
           style={{ width: lineWidth }}
-          className="h-[1px] bg-[#d2d2d7]"
+          className="h-[1px] bg-line"
         />
       </div>
 
@@ -233,7 +145,7 @@ export default function Projects() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: skipEffects ? 0.3 : 0.8, ease }}
-          className="text-[12px] font-semibold text-[#86868b] uppercase tracking-[0.08em] mb-4"
+          className="text-[12px] font-semibold text-ink-3 uppercase tracking-[0.08em] mb-4"
         >
           Featured Projects
         </motion.p>
@@ -243,7 +155,7 @@ export default function Projects() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: skipEffects ? 0.3 : 1, delay: skipEffects ? 0 : 0.1, ease }}
-          className="text-[32px] sm:text-[40px] md:text-[56px] font-semibold text-[#1d1d1f] tracking-[-0.03em] leading-[1.08] mb-20 md:mb-28"
+          className="font-display text-[32px] sm:text-[40px] md:text-[56px] font-bold text-ink tracking-[-0.02em] leading-[1.08] mb-20 md:mb-28"
         >
           Things I&apos;ve built
           <br />
@@ -268,7 +180,7 @@ export default function Projects() {
             href="https://github.com/DillyBoy08"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center h-[44px] px-7 rounded-full text-[13px] font-medium text-[#86868b] border border-[#d2d2d7] hover:border-[#86868b] hover:text-[#1d1d1f] transition-colors duration-300"
+            className="inline-flex items-center justify-center h-[44px] px-7 rounded-full text-[13px] font-medium text-ink-2 border border-line hover:border-accent hover:text-ink transition-colors duration-300"
           >
             More on GitHub &rarr;
           </MagneticButton>

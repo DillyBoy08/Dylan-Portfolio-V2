@@ -47,16 +47,16 @@ export default function Contact() {
   };
 
   const inputClasses =
-    "w-full bg-[#f5f5f7] rounded-xl px-5 py-4 text-[15px] text-[#1d1d1f] placeholder-[#86868b]/60 outline-none border border-transparent focus:border-[#0071e3] focus:bg-white transition-all duration-300";
+    "w-full bg-canvas-alt rounded-xl px-5 py-4 text-[15px] text-ink placeholder-ink-2/60 outline-none border border-transparent focus:border-accent focus:bg-[#FDFCF9] transition-all duration-300";
 
   return (
-    <section id="contact" className="bg-white">
+    <section id="contact" className="bg-[#FDFCF9]">
       {/* Animated divider */}
       <div className="max-w-[980px] mx-auto px-6">
         <motion.div
           ref={dividerRef}
           style={{ width: lineWidth }}
-          className="h-[1px] bg-[#d2d2d7]"
+          className="h-[1px] bg-line"
         />
       </div>
 
@@ -69,7 +69,7 @@ export default function Contact() {
               whileInView={{ opacity: 1 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: skipEffects ? 0.3 : 0.8, ease }}
-              className="text-[12px] font-semibold text-[#86868b] uppercase tracking-[0.08em] mb-4"
+              className="text-[12px] font-semibold text-ink-3 uppercase tracking-[0.08em] mb-4"
             >
               Get in Touch
             </motion.p>
@@ -79,7 +79,7 @@ export default function Contact() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: skipEffects ? 0.3 : 1, delay: skipEffects ? 0 : 0.1, ease }}
-              className="text-[32px] sm:text-[40px] md:text-[56px] font-semibold text-[#1d1d1f] tracking-[-0.03em] leading-[1.08] mb-6"
+              className="font-display text-[32px] sm:text-[40px] md:text-[56px] font-bold text-ink tracking-[-0.02em] leading-[1.08] mb-6"
             >
               Let&apos;s create
               <br />
@@ -91,7 +91,7 @@ export default function Contact() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: skipEffects ? 0.3 : 0.8, delay: skipEffects ? 0 : 0.2, ease }}
-              className="text-[17px] text-[#86868b] leading-[1.7] tracking-[-0.01em] max-w-[400px] mb-10"
+              className="text-[17px] text-ink-2 leading-[1.7] tracking-[-0.01em] max-w-[400px] mb-10"
             >
               Got a project in mind, or simply fancy a chat?
               Drop me a message, I&apos;d love to hear from you.
@@ -109,7 +109,7 @@ export default function Contact() {
                 href="https://github.com/DillyBoy08"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="link-underline text-[12px] text-[#86868b] hover:text-[#1d1d1f] transition-colors duration-300"
+                className="link-underline text-[12px] text-ink-2 hover:text-ink transition-colors duration-300"
               >
                 GitHub
               </a>
@@ -117,7 +117,7 @@ export default function Contact() {
                 href="https://www.linkedin.com/in/dylan-lee-swart-53229125b/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="link-underline text-[12px] text-[#86868b] hover:text-[#1d1d1f] transition-colors duration-300"
+                className="link-underline text-[12px] text-ink-2 hover:text-ink transition-colors duration-300"
               >
                 LinkedIn
               </a>
@@ -163,7 +163,7 @@ export default function Contact() {
             <button
               type="submit"
               disabled={status === "sending"}
-              className="mt-2 h-[48px] rounded-full bg-[#1d1d1f] text-white text-[14px] font-medium hover:bg-[#000] transition-colors duration-300 hover:shadow-[0_4px_20px_rgba(0,0,0,0.15)] disabled:opacity-50 disabled:cursor-not-allowed"
+              className="mt-2 h-[48px] rounded-full bg-ink text-canvas text-[14px] font-medium hover:bg-[#2D2720] transition-colors duration-300 hover:shadow-[0_4px_20px_rgba(34,29,21,0.18)] disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {status === "sending"
                 ? "Sending..."
